@@ -27,10 +27,10 @@ public class Dentista {
 	@Column(unique = true, nullable = false)
 	private String cedula;
 
-	@Column(nullable = false)
+	@Column(length = 50, nullable = false)
 	private String nombre;
 
-	@Column(nullable = false)
+	@Column(length = 50, nullable = false)
 	private String apellido;
 
 	@Column(nullable = false)
@@ -51,4 +51,3 @@ public class Dentista {
 	private List<Cita> citas;
 
 }
-

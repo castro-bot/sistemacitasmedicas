@@ -5,7 +5,5 @@ bin/
 .project
 .settings/
 .factorypath
-src/main/resources/application.properties
 target/classes/
-target/test-classes/
-pom.xml
+target/test-classes

@@ -6,6 +6,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
+
 @Getter
 @Setter
 @Entity
@@ -13,6 +16,7 @@ public class Paciente {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, nullable = false)
     private Long id;
 
     @Column(nullable = false, length = 50)
@@ -27,12 +31,13 @@ public class Paciente {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(length = 15)
+    @Column(length = 15, unique = true)
     private String telefono;
 
     @Column(nullable = false)
     private LocalDate fechaRegistro;
-
-    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
+    
+	@JsonManagedReference
+    @OneToMany(mappedBy = "paciente", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Cita> citas;
 }

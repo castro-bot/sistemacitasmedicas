@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Getter
 @Setter
 @Entity
@@ -14,10 +16,14 @@ public class Cita {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    
+	@JsonBackReference
     @ManyToOne
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 
+    
+	@JsonBackReference
     @ManyToOne
     @JoinColumn(name = "dentista_id", nullable = false)
     private Dentista dentista;

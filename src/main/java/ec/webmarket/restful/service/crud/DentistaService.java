@@ -30,14 +30,6 @@ public class DentistaService extends GenericCrudServiceImpl<Dentista, DentistaDT
         return repository.findById(dto.getId());
     }
     
-    public Optional<Dentista> findByCedula(String cedula) {
-        return repository.findByCedula(cedula);
-    }
-    
-    public List<Dentista> findByEspecialidad(String especialidad) {
-        return repository.findByEspecialidad(especialidad);
-    }
-    
     public List<CitaDTO> findCitasAsignadas(Long dentistaId) {
         Dentista dentista = repository.findById(dentistaId)
             .orElseThrow(() -> new ApiException("Dentista no encontrado"));

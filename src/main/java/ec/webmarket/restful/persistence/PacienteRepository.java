@@ -6,6 +6,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
-    Optional<Paciente> findByCedula(String cedula);
-    List<Paciente> findByNombreContainingIgnoreCase(String nombre);
+    
 }

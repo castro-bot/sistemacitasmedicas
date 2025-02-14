@@ -27,28 +27,6 @@ public class PacienteService {
                 .toList();
     }
 
-    // Obtener un paciente por ID
-    public PacienteDTO findById(Long id) {
-        Paciente paciente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-        return modelMapper.map(paciente, PacienteDTO.class);
-    }
-
-    // Obtener un paciente por Cédula
-    public PacienteDTO findByCedula(String cedula) {
-        Paciente paciente = pacienteRepository.findByCedula(cedula)
-                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-        return modelMapper.map(paciente, PacienteDTO.class);
-    }
-
-    // Buscar pacientes por nombre
-    public List<PacienteDTO> findByNombre(String nombre) {
-        return pacienteRepository.findByNombreContainingIgnoreCase(nombre)
-                .stream()
-                .map(paciente -> modelMapper.map(paciente, PacienteDTO.class))
-                .toList();
-    }
-
     // Registrar un nuevo paciente
     public PacienteDTO create(PacienteDTO pacienteDTO) {
         pacienteDTO.setFechaRegistro(LocalDate.now());
@@ -73,11 +51,4 @@ public class PacienteService {
         return modelMapper.map(pacienteRepository.save(paciente), PacienteDTO.class);
     }
 
-
-    // Eliminar un paciente
-    public void delete(Long id) {
-        Paciente paciente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-        pacienteRepository.delete(paciente);
-    }
 }

@@ -1,7 +1,8 @@
 package ec.webmarket.restful.dto.v1;
 
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 public class CitaDTO {
@@ -9,6 +10,8 @@ public class CitaDTO {
     private Long pacienteId;
     private Long dentistaId;
     private Long horarioId;
-    private String tipoConsulta;
-    private boolean recordatorioEnviado;
+    private LocalDate fechaCita;
+    private LocalTime horaCita;
+    private String estadoCita;
+    private String motivoConsulta;
 }

@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+
 @Getter
 @Setter
 @Entity
@@ -26,8 +30,14 @@ public class Cita {
     private Horario horario;
 
     @Column(nullable = false)
-    private String tipoConsulta;
+    private LocalDate fechaCita;
 
     @Column(nullable = false)
-    private boolean recordatorioEnviado;
+    private LocalTime horaCita;
+
+    @Column(nullable = false, length = 100)
+    private String estadoCita;
+
+    @Column(nullable = false, length = 255)
+    private String motivoConsulta;
 }

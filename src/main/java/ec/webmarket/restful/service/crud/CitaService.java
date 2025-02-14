@@ -129,4 +129,24 @@ public class CitaService {
 
         return "Recordatorio enviado correctamente.";
     }
+    
+    public List<CitaDTO> findByDentista(Long dentistaId) {
+        Dentista dentista = dentistaRepository.findById(dentistaId)
+                .orElseThrow(() -> new RuntimeException("Dentista no encontrado"));
+        return citaRepository.findByDentista(dentista)
+                .stream()
+                .map(cita -> modelMapper.map(cita, CitaDTO.class))
+                .toList();
+    }
+    
+    public List<CitaDTO> findByPaciente(Long pacienteId) {
+        Paciente paciente = pacienteRepository.findById(pacienteId)
+                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+        return citaRepository.findByPaciente(paciente)
+                .stream()
+                .map(cita -> modelMapper.map(cita, CitaDTO.class))
+                .toList();
+    }
+
+
 }

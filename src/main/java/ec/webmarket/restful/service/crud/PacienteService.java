@@ -52,9 +52,13 @@ public class PacienteService {
     // Registrar un nuevo paciente
     public PacienteDTO create(PacienteDTO pacienteDTO) {
         pacienteDTO.setFechaRegistro(LocalDate.now());
+        if (pacienteDTO.getFechaNacimiento() == null) {
+            throw new RuntimeException("La fecha de nacimiento es obligatoria.");
+        }
         Paciente paciente = modelMapper.map(pacienteDTO, Paciente.class);
         return modelMapper.map(pacienteRepository.save(paciente), PacienteDTO.class);
     }
+
 
     // Actualizar un paciente
     public PacienteDTO update(PacienteDTO pacienteDTO) {

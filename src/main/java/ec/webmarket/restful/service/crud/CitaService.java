@@ -32,19 +32,23 @@ public class CitaService {
 
     private ModelMapper modelMapper = new ModelMapper();
 
-    // Obtener todas las citas
-    public List<CitaDTO> findAll() {
-        return citaRepository.findAll()
+    // Obtener historial de citas por dentista o paciente
+    public List<CitaDTO> findByDentista(Long dentistaId) {
+        Dentista dentista = dentistaRepository.findById(dentistaId)
+                .orElseThrow(() -> new RuntimeException("Dentista no encontrado"));
+        return citaRepository.findByDentista(dentista)
                 .stream()
                 .map(cita -> modelMapper.map(cita, CitaDTO.class))
                 .toList();
     }
 
-    // Obtener una cita por ID
-    public CitaDTO findById(Long id) {
-        Cita cita = citaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cita no encontrada"));
-        return modelMapper.map(cita, CitaDTO.class);
+    public List<CitaDTO> findByPaciente(Long pacienteId) {
+        Paciente paciente = pacienteRepository.findById(pacienteId)
+                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
+        return citaRepository.findByPaciente(paciente)
+                .stream()
+                .map(cita -> modelMapper.map(cita, CitaDTO.class))
+                .toList();
     }
 
     // Agendar una nueva cita
@@ -67,12 +71,16 @@ public class CitaService {
         horario.setDisponible(false);
         horarioRepository.save(horario);
         cita.setHorario(horario);
-        cita.setRecordatorioEnviado(false);
+        cita.setFechaCita(citaDTO.getFechaCita());
+        cita.setHoraCita(citaDTO.getHoraCita());
+        cita.setEstadoCita("Agendada");
+        cita.setMotivoConsulta(citaDTO.getMotivoConsulta());
+
         Cita citaGuardada = citaRepository.save(cita);
         return modelMapper.map(citaGuardada, CitaDTO.class);
     }
 
-    // Modificar una cita
+    // Modificar o reprogramar una cita existente
     public CitaDTO update(Long id, CitaDTO citaDTO) {
         Cita cita = citaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cita no encontrada"));
@@ -95,7 +103,11 @@ public class CitaService {
             horarioRepository.save(nuevoHorario);
         }
 
-        cita.setTipoConsulta(citaDTO.getTipoConsulta());
+        cita.setFechaCita(citaDTO.getFechaCita());
+        cita.setHoraCita(citaDTO.getHoraCita());
+        cita.setEstadoCita(citaDTO.getEstadoCita());
+        cita.setMotivoConsulta(citaDTO.getMotivoConsulta());
+
         Cita citaActualizada = citaRepository.save(cita);
         return modelMapper.map(citaActualizada, CitaDTO.class);
     }
@@ -109,44 +121,7 @@ public class CitaService {
         horario.setDisponible(true);
         horarioRepository.save(horario);
 
-        citaRepository.delete(cita);
-    }
-
-    // Enviar recordatorio de cita (simulado)
-    public String enviarRecordatorio(Long id) {
-        Cita cita = citaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cita no encontrada"));
-
-        if (cita.isRecordatorioEnviado()) {
-            return "Recordatorio ya enviado previamente.";
-        }
-
-        // Simulación del envío de correo (integrar con servicio real)
-        System.out.println("Enviando recordatorio de cita a " + cita.getPaciente().getEmail());
-
-        cita.setRecordatorioEnviado(true);
+        cita.setEstadoCita("Cancelada");
         citaRepository.save(cita);
-
-        return "Recordatorio enviado correctamente.";
     }
-    
-    public List<CitaDTO> findByDentista(Long dentistaId) {
-        Dentista dentista = dentistaRepository.findById(dentistaId)
-                .orElseThrow(() -> new RuntimeException("Dentista no encontrado"));
-        return citaRepository.findByDentista(dentista)
-                .stream()
-                .map(cita -> modelMapper.map(cita, CitaDTO.class))
-                .toList();
-    }
-    
-    public List<CitaDTO> findByPaciente(Long pacienteId) {
-        Paciente paciente = pacienteRepository.findById(pacienteId)
-                .orElseThrow(() -> new RuntimeException("Paciente no encontrado"));
-        return citaRepository.findByPaciente(paciente)
-                .stream()
-                .map(cita -> modelMapper.map(cita, CitaDTO.class))
-                .toList();
-    }
-
-
 }

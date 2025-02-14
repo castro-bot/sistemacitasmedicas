@@ -26,67 +26,49 @@ import jakarta.validation.Valid;
 public class HorarioController {
     
     @Autowired
-    private HorarioService entityService;
+    private HorarioService horarioService;
     
-    @GetMapping
-    public ResponseEntity<?> getAll() {
-        return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, entityService.findAll(new HorarioDTO())), 
-            HttpStatus.OK
-        );
-    }
-    
+    // Creación de horarios según la disponibilidad del odontólogo
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody HorarioDTO dto) {
         return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, entityService.create(dto)), 
+            new ApiResponseDTO<>(true, horarioService.create(dto)), 
             HttpStatus.CREATED
         );
     }
     
+    // Actualización y bloqueo de horarios ya atendidos o no disponibles
     @PutMapping
     public ResponseEntity<?> update(@Valid @RequestBody HorarioDTO dto) {
         return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, entityService.update(dto)), 
+            new ApiResponseDTO<>(true, horarioService.update(dto)), 
             HttpStatus.OK
         );
     }
     
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        HorarioDTO dto = new HorarioDTO();
-        dto.setId(id);
-        entityService.delete(dto);
+    // Visualización de horarios disponibles y no disponibles
+    @GetMapping
+    public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, "Horario eliminado"), 
+            new ApiResponseDTO<>(true, horarioService.findAll(new HorarioDTO())), 
             HttpStatus.OK
         );
     }
     
-    @GetMapping("/dentista/{dentistaId}/fecha")
-    public ResponseEntity<?> getHorariosByDentistaAndFecha(
-            @PathVariable Long dentistaId,
-            @RequestParam LocalDate fechaInicio,
-            @RequestParam LocalDate fechaFin) {
+    // Visualización de horarios de un odontólogo específico
+    @GetMapping("/dentista/{dentistaId}")
+    public ResponseEntity<?> getHorariosByDentista(@PathVariable Long dentistaId) {
         return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, 
-                entityService.findByDentistaAndFechaBetween(dentistaId, fechaInicio, fechaFin)), 
+            new ApiResponseDTO<>(true, horarioService.findHorariosDisponibles(dentistaId)), 
             HttpStatus.OK
         );
     }
-    
-    @GetMapping("/dentista/{dentistaId}/disponibles")
-    public ResponseEntity<?> getHorariosDisponibles(@PathVariable Long dentistaId) {
-        return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, entityService.findHorariosDisponibles(dentistaId)), 
-            HttpStatus.OK
-        );
-    }
-    
+
+    // Visualización de horarios de una fecha específica
     @GetMapping("/fecha/{fecha}")
     public ResponseEntity<?> getHorariosByFecha(@PathVariable LocalDate fecha) {
         return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, entityService.findByFecha(fecha)), 
+            new ApiResponseDTO<>(true, horarioService.findByFecha(fecha)), 
             HttpStatus.OK
         );
     }

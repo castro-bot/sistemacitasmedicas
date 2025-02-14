@@ -18,9 +18,16 @@ public class CitasController {
     private CitaService citaService;
 
     @PostMapping
-    public ResponseEntity<?> createCita(@RequestBody CitaDTO citaDTO) {
-        return ResponseEntity.ok(new ApiResponseDTO<>(true, citaService.create(citaDTO)));
+    public ResponseEntity<String> createCita(@RequestBody CitaDTO citaDTO) {
+        CitaDTO result = citaService.create(citaDTO);
+
+        if ("El horario seleccionado no está disponible.".equals(result.getEstadoCita())) {
+            return ResponseEntity.badRequest().body("El horario seleccionado no está disponible.");
+        }
+
+        return ResponseEntity.ok("Cita creada exitosamente.");
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCita(@PathVariable Long id, @RequestBody CitaDTO citaDTO) {

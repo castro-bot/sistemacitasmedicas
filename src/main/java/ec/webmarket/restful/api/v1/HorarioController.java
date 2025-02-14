@@ -59,10 +59,11 @@ public class HorarioController {
     @GetMapping("/dentista/{dentistaId}")
     public ResponseEntity<?> getHorariosByDentista(@PathVariable Long dentistaId) {
         return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, horarioService.findHorariosDisponibles(dentistaId)), 
+            new ApiResponseDTO<>(true, horarioService.findHorariosByDentista(dentistaId)), 
             HttpStatus.OK
         );
     }
+
 
     // Visualización de horarios de una fecha específica
     @GetMapping("/fecha/{fecha}")

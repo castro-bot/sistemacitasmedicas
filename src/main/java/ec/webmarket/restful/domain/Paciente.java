@@ -35,4 +35,10 @@ public class Paciente {
 
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
     private List<Cita> citas;
+
+    @Column(nullable = false)
+    private LocalDate fechaNacimiento;
+
+    @Column(nullable = false, length = 255)
+    private String direccionResidencia;
 }

@@ -11,4 +11,5 @@ import ec.webmarket.restful.domain.Horario;
 public interface HorarioRepository extends JpaRepository<Horario, Long> {
     List<Horario> findByDentistaAndFechaBetween(Dentista dentista, LocalDate fechaInicio, LocalDate fechaFin);
     List<Horario> findByDentistaAndDisponible(Dentista dentista, boolean disponible);
+    List<Horario> findByFecha(LocalDate fecha);
 }

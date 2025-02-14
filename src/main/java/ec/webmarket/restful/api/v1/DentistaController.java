@@ -41,37 +41,11 @@ public class DentistaController {
         );
     }
     
-    @PutMapping
-    public ResponseEntity<?> update(@Valid @RequestBody DentistaDTO dto) {
+   
+    @GetMapping("/{id}/citas")
+    public ResponseEntity<?> getCitasAsignadas(@PathVariable Long id) {
         return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, entityService.update(dto)), 
-            HttpStatus.OK
-        );
-    }
-    
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        DentistaDTO dto = new DentistaDTO();
-        dto.setId(id);
-        entityService.delete(dto);
-        return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, "Dentista eliminado"), 
-            HttpStatus.OK
-        );
-    }
-    
-    @GetMapping("/{cedula}")
-    public ResponseEntity<?> getByCedula(@PathVariable String cedula) {
-        return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, entityService.findByCedula(cedula)), 
-            HttpStatus.OK
-        );
-    }
-    
-    @GetMapping("/especialidad/{especialidad}")
-    public ResponseEntity<?> getByEspecialidad(@PathVariable String especialidad) {
-        return new ResponseEntity<>(
-            new ApiResponseDTO<>(true, entityService.findByEspecialidad(especialidad)), 
+            new ApiResponseDTO<>(true, entityService.findCitasAsignadas(id)), 
             HttpStatus.OK
         );
     }

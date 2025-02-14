@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,13 @@ public class HorarioService extends GenericCrudServiceImpl<Horario, HorarioDTO> 
     private boolean existeSuperposicion(LocalTime inicio1, LocalTime fin1, 
                                       LocalTime inicio2, LocalTime fin2) {
         return !fin1.isBefore(inicio2) && !inicio1.isAfter(fin2);
+    }
+    
+    public List<HorarioDTO> findByFecha(LocalDate fecha) {
+        List<Horario> horarios = repository.findByFecha(fecha);
+        return horarios.stream()
+            .map(this::mapToDto)
+            .collect(Collectors.toList());
     }
     
     @Override

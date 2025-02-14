@@ -82,4 +82,12 @@ public class HorarioController {
             HttpStatus.OK
         );
     }
+    
+    @GetMapping("/fecha/{fecha}")
+    public ResponseEntity<?> getHorariosByFecha(@PathVariable LocalDate fecha) {
+        return new ResponseEntity<>(
+            new ApiResponseDTO<>(true, entityService.findByFecha(fecha)), 
+            HttpStatus.OK
+        );
+    }
 }
